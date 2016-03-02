@@ -2,6 +2,7 @@ package button.anim.cn.buttonanimdemo;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,13 @@ public class ViewWrapperActivity extends Activity implements View.OnClickListene
 
 //        ViewWrapper viewWrapper = new ViewWrapper(v);
 //        ViewWrapper viewWrapper = new ViewWrapper(mAnimateButton);
-        ObjectAnimator animator = ObjectAnimator.ofInt(mWrapper, "width", /*viewWrapper.getWidth(),*/ 1500);
+        int width = v.getLayoutParams().width;
+        int height = v.getHeight(); // current height
+        PropertyValuesHolder widthHolder = PropertyValuesHolder.ofInt("width", width * 2);
+        PropertyValuesHolder heightHolder = PropertyValuesHolder.ofInt("height", height * 6);
+
+//        ObjectAnimator animator = ObjectAnimator.ofInt(mWrapper, "width", /*viewWrapper.getWidth(),*/ 1500);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mWrapper, widthHolder, heightHolder);
         animator.setInterpolator(new LinearInterpolator());
         animator.addListener(new Animator.AnimatorListener() {
             @Override
@@ -56,7 +63,7 @@ public class ViewWrapperActivity extends Activity implements View.OnClickListene
 
             }
         });
-        animator.setDuration(3000).start();
+        animator.setDuration(1000).start();
     }
 
     class ViewWrapper {
@@ -71,9 +78,21 @@ public class ViewWrapperActivity extends Activity implements View.OnClickListene
             mTargetView.requestLayout();
         }
 
+        // for view's width
         public int getWidth() {
             int width = mTargetView.getLayoutParams().width;
             return width;
+        }
+
+        // for view's height
+        public void setHeight(int height) {
+            mTargetView.getLayoutParams().height = height;
+            mTargetView.requestLayout();
+        }
+
+        public int getHeight() {
+            int height = mTargetView.getLayoutParams().height;
+            return height;
         }
     }
 }
